@@ -1,11 +1,11 @@
+package week1;
+
 import java.util.*;
 
 public class UsernameSystem {
-    // Stores taken usernames: Map<Username, UserId>
-    private Map<String, Integer> registeredUsers = new HashMap<>();
-    
-    // Tracks popularity: Map<Username, Number of attempts>
-    private Map<String, Integer> attemptTracker = new HashMap<>();
+    private final Map<String, Integer> registeredUsers = new HashMap<>();
+
+    private final Map<String, Integer> attemptTracker = new HashMap<>();
     
     private int nextUserId = 1;
 
@@ -13,7 +13,6 @@ public class UsernameSystem {
      * Checks if a username is available in O(1) time.
      */
     public boolean checkAvailability(String username) {
-        // Track the attempt regardless of availability
         attemptTracker.put(username, attemptTracker.getOrDefault(username, 0) + 1);
         
         return !registeredUsers.containsKey(username.toLowerCase());
@@ -59,22 +58,18 @@ public class UsernameSystem {
                 .orElse("No attempts yet");
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         UsernameSystem system = new UsernameSystem();
 
-        // Setup initial users
         system.registerUser("john_doe");
 
-        // Test Availability
         System.out.println("Is 'john_doe' available? " + system.checkAvailability("john_doe")); 
         System.out.println("Is 'jane_smith' available? " + system.checkAvailability("jane_smith"));
 
-        // Test Suggestions
         if (!system.checkAvailability("john_doe")) {
             System.out.println("Suggestions for 'john_doe': " + system.suggestAlternatives("john_doe"));
         }
 
-        // Test Popularity
         system.checkAvailability("admin");
         system.checkAvailability("admin");
         System.out.println("Most attempted username: " + system.getMostAttempted());

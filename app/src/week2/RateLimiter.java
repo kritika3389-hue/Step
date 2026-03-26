@@ -1,9 +1,9 @@
+package week2;
+
 import java.util.concurrent.*;
 import java.util.*;
 
 public class RateLimiter {
-
-    // Internal class representing a client's "Token Bucket"
     private static class TokenBucket {
         private final long maxTokens;
         private final double refillRatePerMs;
@@ -12,13 +12,11 @@ public class RateLimiter {
 
         public TokenBucket(long limitPerHour) {
             this.maxTokens = limitPerHour;
-            // 1000 requests per hour = 1000 / (60 * 60 * 1000) requests per millisecond
             this.refillRatePerMs = (double) limitPerHour / (3600 * 1000);
             this.currentTokens = limitPerHour;
             this.lastRefillTimestamp = System.currentTimeMillis();
         }
 
-        // Synchronized to ensure atomic refill and consumption
         public synchronized boolean tryConsume() {
             refill();
             if (currentTokens >= 1.0) {
@@ -63,16 +61,14 @@ public class RateLimiter {
         }
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         RateLimiter limiter = new RateLimiter();
         String testClient = "abc123";
 
-        // Simulate rapid requests
         for (int i = 0; i < 5; i++) {
             System.out.println("Request " + (i + 1) + ": " + limiter.checkRateLimit(testClient));
         }
 
-        // Manually "drain" tokens for demonstration
         System.out.println("\n--- Simulating limit exhaustion ---");
         TokenBucket b = limiter.clientBuckets.get(testClient);
         b.currentTokens = 0; 

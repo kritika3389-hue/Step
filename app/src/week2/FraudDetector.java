@@ -1,6 +1,7 @@
+package week2;
+
 import java.util.*;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 
 public class FraudDetector {
 
@@ -23,7 +24,7 @@ public class FraudDetector {
         public String toString() { return "ID:" + id + " ($" + amount + ")"; }
     }
 
-    private List<Transaction> transactions = new ArrayList<>();
+    private final List<Transaction> transactions = new ArrayList<>();
 
     public void addTransaction(Transaction t) {
         transactions.add(t);
@@ -35,7 +36,6 @@ public class FraudDetector {
      */
     public List<String> findFraudulentPairs(double targetAmount) {
         List<String> suspiciousPairs = new ArrayList<>();
-        // Maps: Complement Amount -> Transaction
         Map<Double, Transaction> complementMap = new HashMap<>();
 
         for (Transaction current : transactions) {
@@ -43,8 +43,6 @@ public class FraudDetector {
 
             if (complementMap.containsKey(complement)) {
                 Transaction previous = complementMap.get(complement);
-                
-                // Check Time Window (within 1 hour)
                 Duration duration = Duration.between(previous.timestamp, current.timestamp);
                 if (Math.abs(duration.toMinutes()) <= 60) {
                     suspiciousPairs.add("[" + previous + ", " + current + "]");
@@ -59,7 +57,6 @@ public class FraudDetector {
      * Detects duplicates: Same amount and merchant, different accounts.
      */
     public void detectDuplicatePayments() {
-        // Key: amount + merchant
         Map<String, List<Transaction>> merchantMap = new HashMap<>();
 
         for (Transaction t : transactions) {
@@ -79,20 +76,17 @@ public class FraudDetector {
         });
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         FraudDetector detector = new FraudDetector();
 
-        // Adding Sample Data
         detector.addTransaction(new Transaction(1, 500, "Store A", "ACC-1", "10:00"));
         detector.addTransaction(new Transaction(2, 300, "Store B", "ACC-2", "10:15"));
         detector.addTransaction(new Transaction(3, 200, "Store C", "ACC-3", "10:30"));
         detector.addTransaction(new Transaction(4, 500, "Store A", "ACC-9", "10:45"));
 
-        // 1. Two-Sum check for Target $500
         System.out.println("Suspicious pairs summing to $500:");
         detector.findFraudulentPairs(500).forEach(System.out::println);
 
-        // 2. Duplicate Check
         detector.detectDuplicatePayments();
     }
 }

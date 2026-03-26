@@ -1,11 +1,10 @@
+package week2;
+
 import java.util.*;
 
 public class AutocompleteSystem {
-    
-    // Node structure for the Prefix Tree (Trie)
     class TrieNode {
         Map<Character, TrieNode> children = new HashMap<>();
-        // Stores top 10 suggestions at this prefix level for O(1) retrieval
         List<String> topSuggestions = new ArrayList<>();
     }
 
@@ -42,8 +41,7 @@ public class AutocompleteSystem {
         if (!node.topSuggestions.contains(query)) {
             node.topSuggestions.add(query);
         }
-        
-        // Sort based on frequency (Descending), then alphabetically
+
         node.topSuggestions.sort((a, b) -> {
             int freqA = queryFrequency.get(a);
             int freqB = queryFrequency.get(b);
@@ -69,17 +67,15 @@ public class AutocompleteSystem {
         return curr.topSuggestions;
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         AutocompleteSystem scanner = new AutocompleteSystem();
 
-        // Seed data
         scanner.updateFrequency("java tutorial");
         scanner.updateFrequency("java tutorial"); // Rank it higher
         scanner.updateFrequency("javascript");
         scanner.updateFrequency("java download");
         scanner.updateFrequency("java 21 features");
 
-        // Search Test
         System.out.println("Suggestions for 'jav':");
         List<String> results = scanner.search("jav");
         for (int i = 0; i < results.size(); i++) {

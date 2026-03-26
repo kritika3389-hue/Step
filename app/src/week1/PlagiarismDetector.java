@@ -1,11 +1,11 @@
+package week1;
+
 import java.util.*;
 
 public class PlagiarismDetector {
-    // Maps an N-Gram (fingerprint) to a set of Document IDs that contain it
-    private Map<String, Set<String>> ngramIndex = new HashMap<>();
-    
-    // Stores the total N-Gram count for each document to calculate percentages
-    private Map<String, Integer> docTotalNgrams = new HashMap<>();
+    private final Map<String, Set<String>> ngramIndex = new HashMap<>();
+
+    private final Map<String, Integer> docTotalNgrams = new HashMap<>();
     
     private final int N = 5; // Using 5-grams as per hints
 
@@ -28,7 +28,6 @@ public class PlagiarismDetector {
         List<String> inputNgrams = generateNgrams(content);
         Map<String, Integer> matchCounts = new HashMap<>();
 
-        // O(n) scan of the input document n-grams
         for (String gram : inputNgrams) {
             if (ngramIndex.containsKey(gram)) {
                 for (String existingDocId : ngramIndex.get(gram)) {
@@ -63,14 +62,12 @@ public class PlagiarismDetector {
         return ngrams;
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         PlagiarismDetector detector = new PlagiarismDetector();
 
-        // Setup database
         detector.addDocument("essay_089.txt", "the quick brown fox jumps over the lazy dog");
         detector.addDocument("essay_092.txt", "java is a high level class based object oriented programming language");
 
-        // Test Input
         String newSubmission = "java is a high level class based programming language and more";
         System.out.println("Analyzing submission...");
         detector.analyzeDocument(newSubmission);

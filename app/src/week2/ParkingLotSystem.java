@@ -1,4 +1,4 @@
-import java.util.*;
+package week2;
 
 public class ParkingLotSystem {
     enum Status { EMPTY, OCCUPIED, DELETED }
@@ -26,7 +26,6 @@ public class ParkingLotSystem {
         }
     }
 
-    // Custom hash function to map license plate to a spot
     private int hash(String licensePlate) {
         return Math.abs(licensePlate.hashCode()) % capacity;
     }
@@ -41,7 +40,6 @@ public class ParkingLotSystem {
         int currentSpot = preferredSpot;
         int probes = 0;
 
-        // Linear Probing: spot, spot+1, spot+2...
         while (spots[currentSpot].status == Status.OCCUPIED) {
             currentSpot = (currentSpot + 1) % capacity;
             probes++;
@@ -98,10 +96,8 @@ public class ParkingLotSystem {
         System.out.println("--------------------------\n");
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ParkingLotSystem lot = new ParkingLotSystem(500);
-
-        // Simulate collisions by using plates that might hash similarly
         System.out.println(lot.parkVehicle("ABC-1234"));
         System.out.println(lot.parkVehicle("ABC-1235")); 
         System.out.println(lot.parkVehicle("XYZ-9999"));

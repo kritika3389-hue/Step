@@ -1,0 +1,6 @@
+# IntelliJ IDEA / IDE specific files
+.idea/
+*.iml
+
+# Compiled output directories
+out/
